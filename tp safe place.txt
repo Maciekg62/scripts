@@ -31,13 +31,11 @@ end
 
 local function setupCharacterListeners(character)
 	character:WaitForChild("Humanoid").Died:Connect(function()
-		task.wait(1) -- Poczekaj chwilę po śmierci
 		local respawnConn
 		respawnConn = Player.CharacterAdded:Connect(function(char)
 			respawnConn:Disconnect()
-			task.wait(0.5)
 			if char:FindFirstChild("HumanoidRootPart") then
-				char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-21206, 97428, 36654)
+				char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-21206, 97435, 36654)
 			end
 		end)
 	end)
