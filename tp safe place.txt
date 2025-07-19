@@ -3,12 +3,14 @@ local Player = Players.LocalPlayer
 
 local function teleportToSpawn()
 	local Baseplate = Instance.new("Part", workspace)
-	Baseplate.Anchored = true
-	Baseplate.Size = Vector3.new(20, 1, 20)
-	Baseplate.Position = Vector3.new(-21206, 97428, 36654)
-	Baseplate.Name = "SafeBaseplate"
-	Baseplate.Color = Color3.fromRGB(60, 60, 60)
-	Baseplate.Material = Enum.Material.SmoothPlastic
+Baseplate.Anchored = true
+Baseplate.Size = Vector3.new(20, 1, 20)
+Baseplate.Position = Vector3.new(-21206, 97428, 36654)
+Baseplate.Name = "SafeBaseplate"
+Baseplate.Color = Color3.fromRGB(60, 60, 60)
+Baseplate.Material = Enum.Material.SmoothPlastic
+Baseplate.Transparency = 0 -- Niewidoczny
+Baseplate.CanCollide = false -- Nie da się wpaść / odbić
 
 	-- Znajdź obszar gracza
 	local function getPlayerArea()
