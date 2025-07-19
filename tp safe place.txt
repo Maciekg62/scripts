@@ -3,14 +3,12 @@ local Player = Players.LocalPlayer
 
 local function teleportToSpawn()
 	local Baseplate = Instance.new("Part", workspace)
-Baseplate.Anchored = true
-Baseplate.Size = Vector3.new(20, 1, 20)
-Baseplate.Position = Vector3.new(-21206, 97428, 36654)
-Baseplate.Name = "SafeBaseplate"
-Baseplate.Color = Color3.fromRGB(60, 60, 60)
-Baseplate.Material = Enum.Material.SmoothPlastic
-Baseplate.Transparency = 0 -- Niewidoczny
-Baseplate.CanCollide = false -- Nie da się wpaść / odbić
+	Baseplate.Anchored = true
+	Baseplate.Size = Vector3.new(20, 1, 20)
+	Baseplate.Position = Vector3.new(-21206, 97426, 36654)
+	Baseplate.Name = "SafeBaseplate"
+	Baseplate.Color = Color3.fromRGB(60, 60, 60)
+	Baseplate.Material = Enum.Material.SmoothPlastic
 
 	-- Znajdź obszar gracza
 	local function getPlayerArea()
@@ -33,11 +31,13 @@ end
 
 local function setupCharacterListeners(character)
 	character:WaitForChild("Humanoid").Died:Connect(function()
+		task.wait(1) -- Poczekaj chwilę po śmierci
 		local respawnConn
 		respawnConn = Player.CharacterAdded:Connect(function(char)
 			respawnConn:Disconnect()
+			task.wait(0.5)
 			if char:FindFirstChild("HumanoidRootPart") then
-				char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-21206, 97435, 36654)
+				char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-21206, 97430, 36654)
 			end
 		end)
 	end)
