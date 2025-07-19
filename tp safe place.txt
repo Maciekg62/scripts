@@ -1,32 +1,49 @@
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
 
--- Pozycja docelowa
-local targetPosition = Vector3.new(-21206, 97428, 36654)
+local spawnPos = Vector3.new(-21206, 97428, 36654)
 
--- Model z Area'ami
-local areas = workspace:WaitForChild("BuildingAreas")
+-- Stwórz mały baseplate (Spawn Platform)
+local baseplate = Instance.new("Part")
+baseplate.Size = Vector3.new(20, 1, 20)
+baseplate.Anchored = true
+baseplate.Position = spawnPos
+baseplate.Name = "CustomSpawnBaseplate"
+baseplate.Parent = workspace
 
--- Szukanie Area przypisanego do gracza
-for i = 1, 9 do
-	local areaName = "Area" .. i
-	local area = areas:FindFirstChild(areaName)
+-- Znajdź odpowiedni model Area
+local function findPlayerArea()
+    local buildingAreas = workspace:FindFirstChild("BuildingAreas")
+    if not buildingAreas then return nil end
 
-	if area and area:FindFirstChild("Player") and area.Player:IsA("StringValue") then
-		if area.Player.Value == player.Name then
-			-- Znaleziono area gracza
-			local spawn = area:FindFirstChild("SpawnLocation")
-			if spawn and spawn:IsA("BasePart") then
-				spawn.CFrame = CFrame.new(targetPosition)
-			end
-
-			-- Teleport gracza
-			if char and char:FindFirstChild("HumanoidRootPart") then
-				char:MoveTo(targetPosition)
-			end
-
-			break -- nie szukaj dalej
-		end
-	end
+    for i = 1, 9 do
+        local area = buildingAreas:FindFirstChild("Area" .. i)
+        if area then
+            local playerValue = area:FindFirstChild("Player")
+            if playerValue and playerValue:IsA("StringValue") and playerValue.Value == player.Name then
+                return area
+            end
+        end
+    end
+    return nil
 end
+
+-- Przenieś SpawnLocation do danego Area
+local function moveSpawnLocation()
+    local area = findPlayerArea()
+    if area then
+        local spawn = area:FindFirstChild("SpawnLocation")
+        if spawn and spawn:IsA("BasePart") then
+            spawn.CFrame = CFrame.new(spawnPos)
+        end
+    end
+end
+
+-- Ustaw respawn na spawnPos
+player.CharacterAdded:Connect(function(char)
+    task.wait(0.5)
+    local root = char:WaitForChild("HumanoidRootPart")
+    root.CFrame = CFrame.new(spawnPos + Vector3.new(0, 3, 0))
+end)
+
+moveSpawnLocation()
