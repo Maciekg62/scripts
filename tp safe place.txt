@@ -1,0 +1,32 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+
+-- Pozycja docelowa
+local targetPosition = Vector3.new(-21206, 97428, 36654)
+
+-- Model z Area'ami
+local areas = workspace:WaitForChild("BuildingAreas")
+
+-- Szukanie Area przypisanego do gracza
+for i = 1, 9 do
+	local areaName = "Area" .. i
+	local area = areas:FindFirstChild(areaName)
+
+	if area and area:FindFirstChild("Player") and area.Player:IsA("StringValue") then
+		if area.Player.Value == player.Name then
+			-- Znaleziono area gracza
+			local spawn = area:FindFirstChild("SpawnLocation")
+			if spawn and spawn:IsA("BasePart") then
+				spawn.CFrame = CFrame.new(targetPosition)
+			end
+
+			-- Teleport gracza
+			if char and char:FindFirstChild("HumanoidRootPart") then
+				char:MoveTo(targetPosition)
+			end
+
+			break -- nie szukaj dalej
+		end
+	end
+end
